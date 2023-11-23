@@ -4,12 +4,30 @@ inline fn sigmoid(value: anytype) @TypeOf(value) {
     return 1 / (1 + std.math.exp(-value));
 }
 
-const train = [_][3]f64{
+const Sample = [3]f64;
+
+const or_train = [_]Sample{
     .{ 0, 0, 0 },
     .{ 1, 0, 1 },
     .{ 0, 1, 1 },
     .{ 1, 1, 1 },
 };
+
+const and_train = [_]Sample{
+    .{ 0, 0, 0 },
+    .{ 1, 0, 0 },
+    .{ 0, 1, 0 },
+    .{ 1, 1, 1 },
+};
+
+const nand_train = [_]Sample{
+    .{ 0, 0, 1 },
+    .{ 1, 0, 1 },
+    .{ 0, 1, 1 },
+    .{ 1, 1, 0 },
+};
+
+const train = or_train;
 
 fn cost(w1: f64, w2: f64, b: f64) f64 {
     var result: f64 = 0;
@@ -52,7 +70,11 @@ pub fn main() !void {
     while (i < 2) : (i += 1) {
         var j: f64 = 0;
         while (j < 2) : (j += 1) {
-            std.debug.print("{d} | {d} = {d}\n", .{ i, j, sigmoid(i * w1 + j * w2 + b) });
+            std.debug.print("{d}, {d} = {d}\n", .{
+                i,
+                j,
+                sigmoid(i * w1 + j * w2 + b),
+            });
         }
     }
 }
